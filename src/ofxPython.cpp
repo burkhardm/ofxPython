@@ -6,6 +6,9 @@ void init_openframeworks();
 void init_openframeworks_extra();
 }
 
+using std::string;
+using std::vector;
+
 unsigned int ofxPython::instances = 0;
 
 ofxPythonObject make_object_owned(PyObject * obj, bool errcheck);

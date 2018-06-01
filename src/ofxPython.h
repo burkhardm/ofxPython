@@ -6,6 +6,8 @@ extern "C"{
 }
 
 #include <map>
+#include <string>
+#include <vector>
 
 class ofxPythonMappingValue;
 class ofxPythonAttrValue;
@@ -15,13 +17,13 @@ class ofxPythonListMaker;
 class ofxPythonObject
 {
 public:
-	ofxPythonObject method(const string &method_name); //call method without arguments
+	ofxPythonObject method(const std::string &method_name); //call method without arguments
 	ofxPythonObject operator ()(); //call objects without arguments
 	ofxPythonObject operator ()(ofxPythonObject); //call objects 1 argument
 	ofxPythonObject operator ()(ofxPythonObject, ofxPythonObject); //call objects 2 arguments
 	ofxPythonObject operator ()(ofxPythonObject, ofxPythonObject, ofxPythonObject); //call objects 3 arguments
-	ofxPythonAttrValue attr(const string& attribute);
-	ofxPythonMappingValue operator [](const string& key);
+	ofxPythonAttrValue attr(const std::string& attribute);
+	ofxPythonMappingValue operator [](const std::string& key);
 	ofxPythonMappingValue operator [](const char * key);
 	bool isNone() const;
 	bool isBool() const;
@@ -34,22 +36,22 @@ public:
 	bool asBool( ) const;
 	long int asInt() const;
 	double asFloat() const;
-	string asString() const;
-	vector<ofxPythonObject> asVector() const;
+	std::string asString() const;
+	std::vector<ofxPythonObject> asVector() const;
 	std::map<ofxPythonObject,ofxPythonObject> asMap() const;
 	static ofxPythonObject _None();
 	static ofxPythonObject fromBool(bool);
 	static ofxPythonObject fromInt(long int);
 	static ofxPythonObject fromFloat(double);
-	static ofxPythonObject fromString(const string&);
+	static ofxPythonObject fromString(const std::string&);
 	// use makeTuple like this:
 	// ofxPythonObject tuple = ofxPythonObject::makeTuple() << obj1 << obj2 << obj3;
 	static ofxPythonTupleMaker makeTuple();
     static ofxPythonListMaker makeList();
     static ofxPythonObject makeDict();
 	operator bool() const;
-	const string repr();
-	const string str();
+	const std::string repr();
+	const std::string str();
 protected:
 	void insert_borrowed(PyObject *);
 	void insert_owned(PyObject *);
@@ -78,17 +80,17 @@ public:
 	int init(); //returns the number of ofxPython instances,
 				//if it's 1 you should initialize your custom bindings if any
 	void reset();
-	void executeScript(const string& path);
-	void executeString(const string& script);
-    ofxPythonObject executeStatement(const string& script);
-	ofxPythonObject evalString(const string& expression);
-	static ofxPythonObject getObject(const string& name, const string& module);
-	ofxPythonObject getObject(const string& name);
-	ofxPythonObject getObjectOrNone(const string& name);
-	void setObject(const string& name, ofxPythonObject o);
+	void executeScript(const std::string& path);
+	void executeString(const std::string& script);
+    ofxPythonObject executeStatement(const std::string& script);
+	ofxPythonObject evalString(const std::string& expression);
+	static ofxPythonObject getObject(const std::string& name, const std::string& module);
+	ofxPythonObject getObject(const std::string& name);
+	ofxPythonObject getObjectOrNone(const std::string& name);
+	void setObject(const std::string& name, ofxPythonObject o);
     ofxPythonObject getLocals();
-    void setVirtualEnv(const string & path);
-    void addPath(const string & path);
+    void setVirtualEnv(const std::string & path);
+    void addPath(const std::string & path);
 protected:
     ofxPythonObject locals;
 	// ofxPythonObject globals;
@@ -110,13 +112,13 @@ public:
 class ofxPythonObjectLike
 {
 public:
-	ofxPythonObject method(const string &method_name); //call method without arguments
+	ofxPythonObject method(const std::string &method_name); //call method without arguments
 	ofxPythonObject operator ()(); //call objects without arguments
 	ofxPythonObject operator ()(ofxPythonObject); //call objects 1 argument
 	ofxPythonObject operator ()(ofxPythonObject, ofxPythonObject); //call objects 2 arguments
 	ofxPythonObject operator ()(ofxPythonObject, ofxPythonObject, ofxPythonObject); //call objects 3 arguments
-	ofxPythonAttrValue attr(const string& attribute);
-	ofxPythonMappingValue operator [](const string& key);
+	ofxPythonAttrValue attr(const std::string& attribute);
+	ofxPythonMappingValue operator [](const std::string& key);
 	ofxPythonMappingValue operator [](const char * key);
 	bool isNone();
 	bool isBool();
@@ -129,21 +131,21 @@ public:
 	bool asBool();
 	long int asInt();
 	double asFloat();
-	string asString();
-	vector<ofxPythonObject> asVector();
+	std::string asString();
+	std::vector<ofxPythonObject> asVector();
 	std::map<ofxPythonObject,ofxPythonObject> asMap();
 	operator bool();
-	const string repr();
-	const string str();
+	const std::string repr();
+	const std::string str();
 	virtual operator ofxPythonObject()=0;
 };
 
 class ofxPythonMappingValue: public ofxPythonObjectLike
 {
 	ofxPythonObject object;
-	string key;
+	std::string key;
 public:
-	ofxPythonMappingValue(ofxPythonObject o, const string& k);
+	ofxPythonMappingValue(ofxPythonObject o, const std::string& k);
 	operator ofxPythonObject();
 	ofxPythonMappingValue & operator =(ofxPythonObject);
 	ofxPythonMappingValue & operator =(ofxPythonMappingValue & o);
@@ -152,9 +154,9 @@ public:
 class ofxPythonAttrValue: public ofxPythonObjectLike
 {
 	ofxPythonObject object;
-	string attribute;
+	std::string attribute;
 public:
-	ofxPythonAttrValue(ofxPythonObject o, const string& attr);
+	ofxPythonAttrValue(ofxPythonObject o, const std::string& attr);
 	operator ofxPythonObject();
 	ofxPythonAttrValue & operator =(ofxPythonObject);
 	ofxPythonAttrValue & operator =(ofxPythonAttrValue & o);
@@ -162,7 +164,7 @@ public:
 
 class ofxPythonTupleMaker: public ofxPythonObjectLike
 {
-	vector<ofxPythonObject> contents;
+	std::vector<ofxPythonObject> contents;
 public:
 	ofxPythonTupleMaker& operator<<(ofxPythonObject);
 	operator ofxPythonObject();
@@ -170,7 +172,7 @@ public:
 
 class ofxPythonListMaker: public ofxPythonObjectLike
 {
-    vector<ofxPythonObject> contents;
+    std::vector<ofxPythonObject> contents;
 public:
     ofxPythonListMaker& operator<<(ofxPythonObject);
     operator ofxPythonObject();
